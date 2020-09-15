@@ -1,0 +1,21 @@
+proc uvBatch(){
+  
+    string $selList[] = `ls -sl -fl`;
+    if (size($selList) > 0){
+        for ($obj in $selList) {
+            polyCleanupArgList 3 { "1","1","1","0","0","0","0","0","0","1e-005","0","1e-005","0","1e-005","0","1","0" };
+            print ("Creating UV for: " + $obj + "\n");
+            polyProjection -type Planar -md p -uvs "map1" ($obj + ".f[*]");
+            u3dUnfold -ite 1 -p 1 -bi 1 -tf 1 -ms 2048 -rs 2 $obj;
+            u3dLayout -res 256 -scl 1 -mar 0.01 -box 0 1 0 1 $obj;
+            DeleteHistory;
+            print ("Finished UV for: " + $obj + "\n");
+        }
+    }
+    else {
+        print "No mesh selected dood";
+    }
+    print "complete!";
+}
+
+uvBatch();
